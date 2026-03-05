@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grado Superior Marketing y Publicidad</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+        }
+        
+        #info-overlay {
+            position: fixed;
+            top: 20px;
+            left: 20px; 
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.9), rgba(0, 51, 102, 0.9));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-align: left; 
+            border: 2px solid #00FF00;
+            font-size: 14px;
+        }
+        
+        #info-overlay h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .oculto {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="info-overlay">
+        <h2>🎓 GRADO SUPERIOR MARKETING Y PUBLICIDAD</h2>
+    </div>
+
+    <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: true">
+        
+        <a-assets>
+            <video id="video-marketing" 
+                   src="/assets/videos/opcion-a-360.mp4"
+                   autoplay="true" 
+                   crossorigin="anonymous"
+                   preload="auto">
+            </video>
+        </a-assets>
+        
+        <a-entity id="punto-referencia" position="0 1.6 0" visible="false"></a-entity>
+        
+        <a-sky src="#video-marketing"></a-sky>
+        
+        <!-- =============================== -->
+        <!-- BOTÓN VOLVER - VERSIÓN QUE FUNCIONABA -->
+        <!-- =============================== -->
+        <a-entity position="0 -0.8 -3" id="volver-container">
+            
+            <a-entity look-at="#punto-referencia">
+                
+                <!-- HALO VERDE -->
+                <a-ring
+                    position="0 0 0.01"
+                    radius-inner="0.5"
+                    radius-outer="0.6"
+                    color="#00FF00"
+                    opacity="0"
+                    class="vr-indicator"
+                    id="indicator-volver"
+                    material="shader: flat; side: double"
+                    
+                ></a-ring>
+                
+                <!-- Círculo rojo -->
+                <a-circle 
+                    radius="0.5"
+                    color="#A52019"
+                    class="boton-volver"
+                    material="shader: flat; side: double"
+                ></a-circle>
+                
+                
+                <!-- Texto VOLVER -->
+                <a-text 
+                    value="VOLVER"
+                    position="0 0 0.1"
+                    color="#FFFFFF"
+                    align="center"
+                    scale="1 1 1"
+                    font="roboto"
+                    shader="msdf"
+                    baseline="center"
+                    letter-spacing="3"
+                ></a-text>
+                
+                <!-- Zona de click (plano invisible) -->
+                <a-plane
+                    width="2"
+                    height="2"
+                    position="0 0 0.3"
+                    color="#FFFFFF"
+                    opacity="0"
+                    class="clickable"
+                    id="boton-volver-plane"
+                ></a-plane>
+                
+            </a-entity>
+        </a-entity>
+
+        <a-camera position="0 1.6 0" id="camera">
+            <a-cursor 
+                color="#A52019"
+                fuse="false"
+            ></a-cursor>
+        </a-camera>
+        
+    </a-scene>
+
+    <script>
+        AFRAME.registerComponent('update-reference', {
+            tick: function() {
+                var camera = document.querySelector('a-camera');
+                var puntoRef = document.querySelector('#punto-referencia');
+                if (camera && puntoRef) {
+                    var cameraPos = camera.getAttribute('position');
+                    puntoRef.setAttribute('position', cameraPos);
+                }
+            }
+        });
+        
+        var scene = document.querySelector('a-scene');
+        scene.setAttribute('update-reference', '');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("🎬 Video Marketing cargado");
+            
+            var video = document.querySelector('#video-marketing');
+            var infoOverlay = document.getElementById('info-overlay');
+            var botonVolver = document.getElementById('boton-volver-plane');
+            var indicador = document.getElementById('indicator-volver');
+            
+            video.loop = false;
+            
+            video.addEventListener('ended', function() {
+                console.log("📹 Video terminado, volviendo al inicio...");
+                infoOverlay.innerHTML = '<h2>¡GRACIAS POR VER!</h2><p>Redirigiendo...</p>';
+                setTimeout(function() {
+                    window.location.href = '/index.html';
+                }, 2000);
+            });
+            
+            if (botonVolver && indicador) {
+                botonVolver.addEventListener('mouseenter', function() {
+                    indicador.setAttribute('opacity', '0.7');
+                });
+                
+                botonVolver.addEventListener('mouseleave', function() {
+                    indicador.setAttribute('opacity', '0');
+                });
+                
+                botonVolver.addEventListener('click', function() {
+                    window.location.href = '/index.html';
+                });
+                
+                console.log("✅ Botón VOLVER configurado");
+            }
+        });
+    </script>
+    
+</body>
+</html>

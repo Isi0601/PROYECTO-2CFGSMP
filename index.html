@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Virtual - Grados Comercio y Marketing</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-laser-controls@1.0.0/dist/aframe-laser-controls.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+        }
+        #instrucciones {
+            position: fixed;
+            top: 20px;
+            left: 20px; 
+            background: linear-gradient(135deg, rgba(0, 80, 160, 0.9), rgba(0, 120, 220, 0.9));
+            color: white;
+            padding: 15px 20px; 
+            border-radius: 12px;
+            z-index: 1000;
+            transition: opacity 0.5s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-align: left; 
+            border: 2px solid white;
+            max-width: 600px;  
+        }
+        #instrucciones h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        #instrucciones p {
+            margin: 6px 0;
+            font-size: 14px; 
+        }
+        .oculto {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="instrucciones">
+        <h3>🎓 Tour Virtual - Grados Comercio y Marketing</h3>
+        <p>🔍 <strong>Gira la cabeza</strong> para mirar alrededor</p>
+        <p>👆 <strong>Haz clic</strong> en las opciones que aparecen</p>
+    </div>
+
+    <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: true">
+        
+        <a-assets>
+            <a-asset-item id="escuela-3d" src="/assets/models/escuela.glb"></a-asset-item>
+            <img id="icono-a" src="/assets/images/icono-opcion-a.png">
+            <img id="icono-b" src="/assets/images/icono-opcion-b.png">
+            <audio id="click-sound" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg" preload="auto"></audio>
+        </a-assets>
+        
+        <a-entity id="punto-referencia" position="0 1.6 0" visible="false"></a-entity>
+        
+        <!-- Modelo 3D de la escuela -->
+        <a-entity 
+            gltf-model="#escuela-3d"
+            position="-1 0 -6"
+            scale="1 1 1"
+            rotation="0 0 0"
+            id="modelo-escuela"
+            visible="true"
+        ></a-entity>
+
+        <!-- =============================== -->
+        <!-- BOTÓN MARKETING - SIN LOOK-AT -->
+        <!-- =============================== -->
+        <a-entity position="-3.2 2.4 -5" rotation="0 90 0">
+            <!-- ICONO - SIN LOOK-AT -->
+            <a-image 
+                src="#icono-a"
+                width="0.9" 
+                height="0.9"
+                position="-2 -0.8 0"
+                class="boton-opcion clickable"
+                data-video="video-opcion-a"
+                onclick="window.location.href='/marketing.html'"
+                animation__mouseenter="property: scale; to: 1.2 1.2 1.2; dur: 200"
+                animation__mouseleave="property: scale; to: 1 1 1; dur: 200"
+            ></a-image>
+            
+            <!-- TEXTO Y CAJA - SIN LOOK-AT -->
+            <a-entity position="0 -0.8 0">
+                <a-plane width="2.8" height="0.6" position="0 0 -0.1" color="#0066CC" opacity="0.9"></a-plane>
+                <a-text 
+                    value="GRADO SUPERIOR MARKETING Y PUBLICIDAD"
+                    position="0 0 0"
+                    color="#FFFFFF"
+                    align="center"
+                    width="2.3"
+                    font="roboto"
+                    shader="msdf"
+                    negate="false"
+                    wrap-count="25"
+                    baseline="center"
+                    letter-spacing="2"
+                    scale="1.2 1.2 1"
+                ></a-text>
+            </a-entity>
+
+            <!-- HALO VERDE - SIN LOOK-AT -->
+            <a-ring position="-2 -0.8 0.01" radius-inner="0.45" radius-outer="0.55" color="#00FF00" opacity="0" id="indicator-a"></a-ring>
+        </a-entity>
+
+        <!-- =============================== -->
+        <!-- BOTÓN PUBLICIDAD - SIN LOOK-AT Y CAJA ROSA MÁS PEQUEÑA -->
+        <!-- =============================== -->
+        <a-entity position="-3.2 2.4 3"rotation="0 90 0">
+            <!-- ICONO - SIN LOOK-AT -->
+            <a-image 
+                src="#icono-b"
+                width="0.9" 
+                height="0.9"
+                position="-1.75 -0.8 0"
+                class="boton-opcion clickable"
+                data-video="video-opcion-b"
+                onclick="window.location.href='/publicidad.html'"
+                animation__mouseenter="property: scale; to: 1.2 1.2 1.2; dur: 200"
+                animation__mouseleave="property: scale; to: 1 1 1; dur: 200"
+            ></a-image>
+            
+            <!-- TEXTO Y CAJA ROSA MÁS PEQUEÑA - SIN LOOK-AT -->
+            <a-entity position="0 -0.8 0"> 
+                <!-- CAJA ROSA MÁS PEQUEÑA (width="1.5") -->
+                <a-plane width="1.7" height="0.6" position="0 0 -0.1" color="#CC0066" opacity="0.9"></a-plane>
+                <a-text 
+                    value="    GRADO MEDIO     ACTIVIDADES COMERCIALES"
+                    position="0 0 0"
+                    color="#FFFFFF"
+                    align="center"
+                    width="1.6"
+                    font="roboto"
+                    shader="msdf"
+                    negate="false"
+                    wrap-count="26"
+                    baseline="center"
+                    letter-spacing="2"
+                    scale="1 1 1"
+                ></a-text>
+            </a-entity>
+            
+            <!-- HALO VERDE - SIN LOOK-AT -->
+            <a-ring position="-1.75 -0.8 0.01" radius-inner="0.45" radius-outer="0.55" color="#00FF00" opacity="0" id="indicator-b"></a-ring>
+        </a-entity>
+
+        <!-- =============================== -->
+        <!-- CÁMARA CON ROTACIÓN -->
+        <!-- =============================== -->
+        <a-entity rotation="0 90 0">
+            <a-camera position="0 1.6 0" id="camera">
+                <a-cursor 
+                    fuse="true"
+                    fuse-timeout="1000"
+                    color="#FF3366"
+                ></a-cursor>
+            </a-camera>
+        </a-entity>
+        
+        <!-- Mandos VR -->
+        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+        
+    </a-scene>
+
+    <script>
+        // Actualizar punto de referencia
+        AFRAME.registerComponent('update-reference', {
+            tick: function() {
+                var camera = document.querySelector('a-camera');
+                var puntoRef = document.querySelector('#punto-referencia');
+                if (camera && puntoRef) {
+                    var cameraPos = camera.getAttribute('position');
+                    puntoRef.setAttribute('position', cameraPos);
+                }
+            }
+        });
+        
+        var scene = document.querySelector('a-scene');
+        scene.setAttribute('update-reference', '');
+
+        // Mostrar indicadores verdes al pasar el ratón
+        document.querySelectorAll('.boton-opcion').forEach(function(boton) {
+            boton.addEventListener('mouseenter', function() {
+                var videoId = this.getAttribute('data-video');
+                var indicatorId = 'indicator-' + videoId.split('-')[2];
+                var indicator = document.getElementById(indicatorId);
+                if (indicator) indicator.setAttribute('opacity', '0.7');
+            });
+            
+            boton.addEventListener('mouseleave', function() {
+                var videoId = this.getAttribute('data-video');
+                var indicatorId = 'indicator-' + videoId.split('-')[2];
+                var indicator = document.getElementById(indicatorId);
+                if (indicator) indicator.setAttribute('opacity', '0');
+            });
+        });
+
+        // ============================================
+        // ÚNICO SCRIPT PARA AJUSTAR MODELO
+        // ============================================
+        document.addEventListener('keydown', function(event) {
+            var modelo = document.getElementById('modelo-escuela');
+            if (!modelo) return;
+            
+            var escala = modelo.getAttribute('scale') || {x:1, y:1, z:1};
+            var pos = modelo.getAttribute('position') || {x:0, y:0, z:0};
+            var rot = modelo.getAttribute('rotation') || {x:0, y:0, z:0};
+            
+            if (event.key.startsWith('Arrow') || event.key === 'PageUp' || event.key === 'PageDown' || event.key === '+' || event.key === '-') {
+                event.preventDefault();
+            }
+            
+            if (event.key === '+') {
+                modelo.setAttribute('scale', {
+                    x: Number((escala.x + 0.1).toFixed(2)),
+                    y: Number((escala.y + 0.1).toFixed(2)),
+                    z: Number((escala.z + 0.1).toFixed(2))
+                });
+                console.log("➕ Escala:", (escala.x + 0.1).toFixed(2));
+            }
+            if (event.key === '-') {
+                modelo.setAttribute('scale', {
+                    x: Number((Math.max(0.1, escala.x - 0.1)).toFixed(2)),
+                    y: Number((Math.max(0.1, escala.y - 0.1)).toFixed(2)),
+                    z: Number((Math.max(0.1, escala.z - 0.1)).toFixed(2))
+                });
+                console.log("➖ Escala:", (Math.max(0.1, escala.x - 0.1)).toFixed(2));
+            }
+            if (event.key === 'ArrowUp') {
+                modelo.setAttribute('position', {x: pos.x, y: Number((pos.y + 0.1).toFixed(2)), z: pos.z});
+                console.log("⬆️ Y:", (pos.y + 0.1).toFixed(2));
+            }
+            if (event.key === 'ArrowDown') {
+                modelo.setAttribute('position', {x: pos.x, y: Number((pos.y - 0.1).toFixed(2)), z: pos.z});
+                console.log("⬇️ Y:", (pos.y - 0.1).toFixed(2));
+            }
+            if (event.key === 'ArrowLeft') {
+                modelo.setAttribute('position', {x: Number((pos.x - 0.1).toFixed(2)), y: pos.y, z: pos.z});
+                console.log("⬅️ X:", (pos.x - 0.1).toFixed(2));
+            }
+            if (event.key === 'ArrowRight') {
+                modelo.setAttribute('position', {x: Number((pos.x + 0.1).toFixed(2)), y: pos.y, z: pos.z});
+                console.log("➡️ X:", (pos.x + 0.1).toFixed(2));
+            }
+            if (event.key === 'PageUp') {
+                modelo.setAttribute('position', {x: pos.x, y: pos.y, z: Number((pos.z - 0.1).toFixed(2))});
+                console.log("📏 Z (cerca):", (pos.z - 0.1).toFixed(2));
+            }
+            if (event.key === 'PageDown') {
+                modelo.setAttribute('position', {x: pos.x, y: pos.y, z: Number((pos.z + 0.1).toFixed(2))});
+                console.log("📏 Z (lejos):", (pos.z + 0.1).toFixed(2));
+            }
+            if (event.key === 'r') {
+                modelo.setAttribute('rotation', {x: rot.x, y: Number((rot.y + 5).toFixed(2)), z: rot.z});
+                console.log("🔄 Rotación Y:", (rot.y + 5).toFixed(2) + "°");
+            }
+            if (event.key === 'R') {
+                modelo.setAttribute('rotation', {x: rot.x, y: Number((rot.y - 5).toFixed(2)), z: rot.z});
+                console.log("🔄 Rotación Y:", (rot.y - 5).toFixed(2) + "°");
+            }
+            
+            if (event.key === 'p' || event.key === 'P') {
+                var posFinal = modelo.getAttribute('position');
+                var escalaFinal = modelo.getAttribute('scale');
+                var rotFinal = modelo.getAttribute('rotation');
+                
+                console.log("");
+                console.log("========== VALORES ACTUALES ==========");
+                console.log("POSICIÓN: " + posFinal.x.toFixed(2) + " " + posFinal.y.toFixed(2) + " " + posFinal.z.toFixed(2));
+                console.log("ESCALA: " + escalaFinal.x.toFixed(2) + " " + escalaFinal.y.toFixed(2) + " " + escalaFinal.z.toFixed(2));
+                console.log("ROTACIÓN: " + rotFinal.x.toFixed(2) + " " + rotFinal.y.toFixed(2) + " " + rotFinal.z.toFixed(2));
+                console.log("========================================");
+                
+                alert("POSICIÓN: " + posFinal.x.toFixed(2) + " " + posFinal.y.toFixed(2) + " " + posFinal.z.toFixed(2) +
+                      "\nESCALA: " + escalaFinal.x.toFixed(2) +
+                      "\nROTACIÓN Y: " + rotFinal.y.toFixed(2) + "°");
+            }
+        });
+
+        console.log("✅ Tour virtual con elementos fijos (sin look-at)");
+    </script>
+</body>
+</html>
